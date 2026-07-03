@@ -1097,20 +1097,24 @@ h1 {
 /* Grade 2 colunas x 3 linhas de áreas clicáveis, sobreposta às 6 opções.
    O topo (~13%) é pulado porque a imagem já traz o título "Escolha sua resposta:".
    Ordem (linha a linha): 0=sup.esq 1=sup.dir 2=meio.esq 3=meio.dir 4=inf.esq 5=inf.dir */
+/* As imagens de opções são uma grade 2x3 que ocupa a imagem de borda a borda,
+   com gutters ~2,6% (horizontal) e ~3,8% (vertical) e sem título no topo.
+   Os hotspots espelham exatamente essa grade (medido a partir dos PNGs). */
 .options-hotspots {
   position: absolute;
-  inset: 13% 2% 1% 2%;
+  inset: 0 0 1% 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 0;
+  column-gap: 2.6%;
+  row-gap: 3.8%;
 }
 
 .option-hotspot {
   background: transparent;
   border: 2px solid transparent;
-  border-radius: 11px;
-  margin: 7px 9px;
+  border-radius: 13px;
+  margin: 2px;
   padding: 0;
   cursor: pointer;
   transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
