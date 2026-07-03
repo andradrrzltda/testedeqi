@@ -732,6 +732,18 @@ h1 {
   color: var(--gold-dark);
 }
 
+.profile-verdict {
+  margin: 6px 0 4px;
+  padding: 12px 15px;
+  background: #fbf3de;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--text);
+}
+
 .profile-about {
   margin-top: 16px;
   padding-top: 14px;

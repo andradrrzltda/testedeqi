@@ -1165,6 +1165,255 @@ function getProfile(iq) {
   return IQ_PROFILES.find((p) => iq >= p.min) || IQ_PROFILES[IQ_PROFILES.length - 1];
 }
 
+// Perfil ESPECÍFICO por valor exato de QI, usado a partir de 22 acertos (QI ≥ 104).
+// Cada nível tem: veredito (gênio/superdotado ou não), resumo, profissões reais e
+// pessoas reais com QI aproximado (estimativas populares, não oficiais).
+// Abaixo de 104 (menos de 22 acertos) o site continua usando o perfil por faixa.
+const IQ_DETAIL = {
+  77: {
+    title: "Abaixo da média (faixa limítrofe)",
+    verdict:
+      "Não é superdotação nem nível de gênio — e também não é um diagnóstico. Este é um teste curto e recreativo, muito sensível a pressa, distração e falta de familiaridade com o formato. O número diz pouco sobre o seu potencial real.",
+    summary:
+      "Com 12 acertos, a pontuação ficou abaixo da média nesta rodada. Muita gente sobe várias faixas simplesmente refazendo com calma e sem interrupções. Costuma indicar um raciocínio mais prático e concreto, com mais dificuldade nas questões abstratas.",
+    careers:
+      "Você tende a se dar bem em funções práticas e concretas, com rotina e instruções claras: auxiliar de produção, serviços gerais, logística e estoque, montagem, atendimento e funções operacionais em geral — especialmente com treino e prática.",
+    people:
+      "Nesta faixa não existem estimativas confiáveis de 'QI de celebridades', e um número baixo num teste rápido não define ninguém: o boxeador Muhammad Ali, um dos maiores atletas da história, tirou cerca de 78 num teste de QI do exército e brincou que era 'o maior, não o mais inteligente'. Ou seja, o resultado aqui fala muito pouco sobre o seu valor.",
+  },
+  80: {
+    title: "Médio inferior",
+    verdict:
+      "Não é gênio nem superdotação (o corte é 130) — e nem um diagnóstico. É um teste recreativo e curto, sensível a cansaço e pressa.",
+    summary:
+      "Com 13 acertos, o resultado ficou um pouco abaixo da média. Indica um raciocínio prático preservado, com mais dificuldade nos itens mais abstratos. Refazer com calma costuma mudar bastante o número.",
+    careers:
+      "Combinam com você funções práticas com rotina e apoio: atendimento ao cliente, operador(a) de caixa, auxiliar administrativo, produção, logística, manutenção e serviços com treinamento.",
+    people:
+      "As listas de 'QI de famosos' não alcançam esta faixa. Como lembrete de que o número importa pouco: Muhammad Ali, lenda do boxe, teve ~78 num teste do exército e seguiu sendo um dos maiores de todos os tempos.",
+  },
+  83: {
+    title: "Médio inferior",
+    verdict:
+      "Não é superdotação nem nível de gênio, e não é um diagnóstico. Esta bateria mede sobretudo padrões visuais e lógica, e é bem sensível à pressa e ao cansaço.",
+    summary:
+      "Com 14 acertos, ficou abaixo da média nesta rodada. Costuma refletir mais pressa ou pouca familiaridade com o formato do que capacidade real, e um segundo teste, com calma, costuma render bem mais.",
+    careers:
+      "Você tende a ir bem em: motorista, operador(a) de máquinas, auxiliar de cozinha, vendas de balcão, produção, manutenção e serviços — funções concretas que rendem com treino e prática.",
+    people:
+      "Não há estimativas sérias de QI de celebridades nesta faixa; a referência honesta é a população em geral. E o número diz pouco: Muhammad Ali marcou ~78 num teste do exército e virou lenda mesmo assim.",
+  },
+  86: {
+    title: "Médio inferior",
+    verdict:
+      "Longe do corte de superdotação (130) e do território de gênio, mas nada de diagnóstico: é um teste rápido e recreativo, fácil de ser puxado para baixo por distração.",
+    summary:
+      "Com 15 acertos, você está um pouco abaixo da média, mas perto dela. Descanso, calma e familiaridade com esse tipo de questão costumam empurrar o resultado para a faixa média.",
+    careers:
+      "Combinam com você funções técnicas e de atendimento com treino: vendas, atendimento ao cliente, produção qualificada, manutenção, logística e auxiliar administrativo.",
+    people:
+      "As listas populares de QI de famosos só citam números de ~120 pra cima, então não há celebridade 'desta faixa' para comparar — a referência real é a maioria das pessoas ao seu redor.",
+  },
+  89: {
+    title: "Quase na média",
+    verdict:
+      "Não é superdotação nem gênio (corte 130), mas está praticamente encostando na faixa média da população. Também não é um diagnóstico.",
+    summary:
+      "Com 16 acertos, você está bem perto da média. Um pouco mais de calma e descanso já costumam levar o resultado para a faixa média, onde fica a maior parte das pessoas.",
+    careers:
+      "Você tende a se dar bem em: técnico(a) em diversas áreas, vendas, atendimento, auxiliar administrativo, produção qualificada, operações e serviços — com boa margem para crescer com estudo.",
+    people:
+      "Não existem estimativas confiáveis de QI de celebridades nesta faixa; a comparação justa é com a população geral e as médias nacionais, não com nomes famosos.",
+  },
+  90: {
+    title: "Médio — a faixa da maioria",
+    verdict:
+      "Não é superdotação nem gênio (o corte é 130), mas também não está abaixo: 90 já entra na faixa média, a da maior parte das pessoas.",
+    summary:
+      "Com 17 acertos, você entra na faixa média — cerca de metade da população fica entre 90 e 110. É um funcionamento intelectual típico, que dá conta bem das demandas do dia a dia, do trabalho e dos estudos.",
+    careers:
+      "Praticamente qualquer profissão do cotidiano, e as mais técnicas com estudo e prática: administração, vendas, atendimento, produção, técnico(a) em diversas áreas, saúde, serviços e operações.",
+    people:
+      "As listas populares de QI de famosos só costumam citar números de 120 pra cima, então a referência honesta aqui é a maioria das pessoas ao seu redor. Seu resultado está próximo da média nacional estimada de vários países (o Brasil, por exemplo, aparece em ~87–100 nessas estimativas, que são muito debatidas).",
+  },
+  93: {
+    title: "Médio — a faixa da maioria",
+    verdict:
+      "Faixa média, típica da maioria das pessoas. Não é superdotação nem gênio, e está bem dentro do funcionamento intelectual comum.",
+    summary:
+      "Com 18 acertos, você está confortavelmente na faixa média. Resolve bem os problemas do dia a dia e boa parte dos acadêmicos; o que mais diferencia as pessoas por aqui é interesse, prática e experiência.",
+    careers:
+      "Combinam com você praticamente todas as profissões do cotidiano e, com estudo, as técnicas: administração, saúde, educação, vendas, tecnologia (suporte), produção e serviços.",
+    people:
+      "Nesta faixa não há celebridades com 'QI conhecido' para citar (essas listas começam por volta de 120). A melhor referência é a população em geral e as médias nacionais, próximas do seu resultado.",
+  },
+  96: {
+    title: "Médio",
+    verdict:
+      "Bem no miolo da faixa média, quase na marca de 100. Não é superdotação nem gênio — é o raciocínio típico da maior parte das pessoas.",
+    summary:
+      "Com 19 acertos, você está quase no centro exato da escala. Dá conta das demandas comuns e aprende bem com instrução e prática, com leve espaço para crescer rumo à média cheia (100).",
+    careers:
+      "Você se dá bem em praticamente qualquer profissão do dia a dia e, com estudo, nas técnicas: administração, saúde, educação, vendas, atendimento, produção, logística e tecnologia.",
+    people:
+      "A média mundial (100) está logo acima do seu resultado. Como as listas de QI de famosos só citam números bem mais altos, a referência real aqui é a maioria das pessoas ao seu redor, não uma celebridade.",
+  },
+  100: {
+    title: "Exatamente na média",
+    verdict:
+      "É exatamente a média mundial de QI, fixada em 100. Não é superdotação nem gênio — e não precisa ser: metade das pessoas fica entre 90 e 110, então você está bem no centro da população.",
+    summary:
+      "Com 20 acertos, seu resultado é o ponto de equilíbrio da escala. Você lida bem com problemas do dia a dia e acadêmicos comuns; nesta faixa, o que mais diferencia as pessoas é interesse, prática e experiência.",
+    careers:
+      "Praticamente qualquer profissão do cotidiano e, com estudo, também as mais técnicas: administração, saúde, educação, vendas, serviços, produção e tecnologia.",
+    people:
+      "Por definição, 100 é a média de toda a população — é onde estão a maior parte dos seus colegas, amigos e familiares. As listas de 'QI de celebridades' começam bem acima (a partir de ~120), então não há uma pessoa famosa 'de QI 100' para citar: a referência é justamente a maioria das pessoas.",
+  },
+  102: {
+    title: "Na média",
+    verdict:
+      "Levemente acima do ponto médio (100), ainda na faixa média. Não é superdotação nem gênio, mas também não está abaixo da média — é o funcionamento típico da maioria.",
+    summary:
+      "Com 21 acertos, você fica logo acima do centro da escala. É um raciocínio típico, com leve vantagem em problemas novos, e bastante espaço para crescer com método e prática.",
+    careers:
+      "Você tende a ir bem em praticamente qualquer profissão do cotidiano e, com estudo, nas técnicas: administração, saúde, educação, vendas, tecnologia, produção e serviços qualificados.",
+    people:
+      "Você está praticamente na média mundial (100). Como as listas populares de QI de famosos só citam números de ~120 pra cima, não há celebridade desta faixa para comparar — a referência é a maioria das pessoas ao seu redor.",
+  },
+  104: {
+    title: "Acima da média",
+    verdict:
+      "Não é um resultado de gênio nem de superdotação — o corte de altas habilidades fica em 130, bem acima daqui —, mas está claramente acima da média da população, que é 100. Você está à frente de cerca de 60% das pessoas.",
+    summary:
+      "Com 22 acertos, seu raciocínio fica um degrau acima da média. Você resolve bem tanto os problemas do dia a dia quanto boa parte dos desafios acadêmicos e do trabalho, principalmente quando tem método e um pouco de prática. Aprende com facilidade e costuma se sair bem em provas e cursos que cobram raciocínio.",
+    careers:
+      "Você tende a ir bem em profissões qualificadas que misturam técnica e trato com pessoas: analista administrativo(a), técnico(a) de enfermagem, professor(a), representante comercial e vendas, corretor(a) de imóveis, supervisor(a) de operações, suporte e infraestrutura de TI, assistente jurídico(a) e gestão de pequenos negócios.",
+    people:
+      "As listas populares de 'QI de famosos' quase só citam números de 120 pra cima, então nesta faixa a referência mais honesta não é uma celebridade, e sim a maioria dos profissionais formados ao seu redor — o topo dos universitários é estimado em ~115. O nome público mais citado logo acima do seu nível costuma ser o do ex-presidente americano George W. Bush (~120, estimativa não oficial).",
+  },
+  106: {
+    title: "Acima da média",
+    verdict:
+      "Ainda não é nível de gênio nem de superdotação (o corte é 130), mas está acima da média (100): você fica à frente de cerca de 65% das pessoas.",
+    summary:
+      "Com 23 acertos, você mostra um raciocínio consistente e acima do comum. Pega conceitos novos com relativa rapidez, lida bem com problemas de várias etapas e costuma ser a pessoa que 'entende as coisas rápido' no grupo. É uma faixa bem confortável para cursos superiores e concursos que exigem lógica.",
+    careers:
+      "Combinam com você: administração, contabilidade, professor(a), enfermagem, análise de dados júnior, técnico(a) em TI, comércio e vendas técnicas, logística, recursos humanos e empreendedorismo de pequeno e médio porte.",
+    people:
+      "Nesta faixa mediana-alta as estimativas populares de QI de celebridades praticamente não aparecem (elas costumam citar só números de 120 pra cima). A melhor referência é o topo dos universitários (~115) e, logo acima do seu resultado, o ex-presidente George W. Bush, frequentemente estimado em ~120 (estimativa não oficial).",
+  },
+  108: {
+    title: "Acima da média",
+    verdict:
+      "Não chega a ser superdotação ou gênio (o corte de altas habilidades é 130), mas está no topo da faixa média — à frente de cerca de 70% das pessoas.",
+    summary:
+      "Com 24 acertos, você está quase entrando na faixa 'médio superior'. Seu raciocínio lógico e abstrato é bom, você aprende assuntos difíceis com pouca ajuda e organiza bem tarefas complexas. É a inteligência típica de quem se dá bem em graduações exigentes.",
+    careers:
+      "Você tende a brilhar em: engenharia (com dedicação), administração, direito, análise de sistemas, ciências contábeis, enfermagem e área da saúde, ensino, ciência de dados júnior e cargos de coordenação.",
+    people:
+      "É a faixa média estimada de quem conclui uma faculdade. As citações populares de QI de famosos começam um pouco acima do seu nível — o ex-presidente George W. Bush é comumente estimado em ~120 (não oficial), e a partir daí aparecem nomes como Nicole Kidman e Jodie Foster (~132).",
+  },
+  110: {
+    title: "Médio superior",
+    verdict:
+      "Não é superdotação nem gênio (o corte é 130), mas 110 marca o começo do 'médio superior': você está à frente de cerca de 75% da população.",
+    summary:
+      "Com 25 acertos, seu desempenho já está claramente acima da maioria. Você compreende textos e instruções complexas com facilidade, adapta-se rápido a contextos novos e planeja bem tarefas de várias etapas. É a faixa de universitários e profissionais qualificados.",
+    careers:
+      "Áreas que combinam: engenharia, administração e gestão, direito, análise de dados, ciência da computação, medicina e saúde (com dedicação), pesquisa aplicada, arquitetura e cargos de liderança técnica.",
+    people:
+      "É o patamar médio de quem se forma na universidade (~115 no topo). Nas estimativas populares (não oficiais), o nome público mais próximo logo acima do seu é o do ex-presidente George W. Bush (~120); um pouco além aparecem Nicole Kidman e Jodie Foster (~132).",
+  },
+  115: {
+    title: "Médio superior",
+    verdict:
+      "Ainda não é o corte de superdotação (130), mas 115 é exatamente um desvio-padrão acima da média: apenas cerca de 16% da população chega até aqui. Não é 'gênio', é claramente superior à média.",
+    summary:
+      "Com 26 acertos, você está no grupo de melhor desempenho. Aprende conteúdos difíceis mais rápido que a maioria, tem raciocínio lógico e abstrato forte e enxerga a lógica por trás de sistemas complexos. É a faixa comum entre profissionais altamente qualificados.",
+    careers:
+      "Você tende a se destacar em: engenharia, medicina, direito, ciências exatas, ciência de dados, análise de sistemas, pesquisa, finanças e cargos de liderança técnica ou científica.",
+    people:
+      "115 é a média estimada de quem se forma na universidade. Logo acima do seu nível, estimativas populares (não oficiais) citam George W. Bush (~120), e mais adiante Nicole Kidman e Jodie Foster (~132). Você já está a caminho da faixa dos nomes mais citados nessas listas.",
+  },
+  118: {
+    title: "Inteligência acima da média",
+    verdict:
+      "Ainda não atinge o corte de superdotação (130), então não é 'gênio' no sentido técnico, mas está entre os cerca de 12% de melhor desempenho — inteligência claramente acima da média.",
+    summary:
+      "Com 27 acertos, você está no limiar da faixa superior. Sustenta raciocínios longos sem se perder, resolve problemas de várias etapas com facilidade e aprende quase sozinho assuntos que travam a maioria. É típico de médicos, engenheiros, advogados e cientistas.",
+    careers:
+      "Combinam fortemente: medicina, engenharia, direito, pesquisa científica, ciência de dados, tecnologia, magistratura e cargos técnicos de alta responsabilidade.",
+    people:
+      "Você está praticamente no mesmo patamar estimado do ex-presidente George W. Bush (~120, estimativa não oficial). Logo acima aparecem nomes como Nicole Kidman e Jodie Foster (~132), e a média estimada dos grandes mestres de xadrez fica em torno de 130.",
+  },
+  125: {
+    title: "Inteligência superior",
+    verdict:
+      "Ainda não é o corte de superdotação (130), mas é inteligência superior de verdade: só cerca de 5% da população chega aqui. Está a um passo do território de 'gênio'.",
+    summary:
+      "Com 28 acertos, seu raciocínio está bem à frente da média. Você aprende rápido, abstrai com naturalidade e lida com problemas complexos e inéditos sem depender de exemplos prontos. É a faixa de quem costuma se destacar em áreas técnicas e científicas exigentes.",
+    careers:
+      "Você tende a se destacar em: medicina, engenharia, direito de alto desempenho, pesquisa científica, ciência de dados, física, tecnologia de ponta, magistratura e cargos de liderança técnica.",
+    people:
+      "A média estimada dos grandes mestres de xadrez (~130) está logo acima de você. Em estimativas populares (não oficiais), você se aproxima de nomes como Jodie Foster e Nicole Kidman (~132), e do piso de entrada da Mensa, que aceita o topo de 2% (130).",
+  },
+  129: {
+    title: "Inteligência superior — no limiar da superdotação",
+    verdict:
+      "Você está a um único ponto do corte de superdotação e do piso de entrada da Mensa (130). Praticamente no limiar das altas habilidades — o topo de cerca de 3% da população.",
+    summary:
+      "Com 29 acertos, você está quase no território das altas habilidades. Percebe padrões sutis muito rápido, faz pontes entre áreas diferentes e sustenta raciocínios complexos com folga. Falta pouquíssimo para o corte oficial de superdotação.",
+    careers:
+      "Combinam com você: pesquisa científica, engenharia avançada, medicina, física, matemática aplicada, ciência de dados, direito de ponta, tecnologia e estratégia.",
+    people:
+      "Você está no mesmo patamar estimado de Jodie Foster e Nicole Kidman (~132) e logo abaixo de Arnold Schwarzenegger (~135) — estimativas populares, não oficiais. Está praticamente encostando no piso da Mensa (130).",
+  },
+  135: {
+    title: "Superdotação · altas habilidades",
+    verdict:
+      "Aqui você cruza o corte de superdotação / altas habilidades (130) e o piso de entrada da Mensa — território de cerca de 1% da população. No sentido popular, já pode ser chamado de nível de gênio.",
+    summary:
+      "Com 30 acertos, você entra na faixa de altas habilidades. Combina raciocínio abstrato muito veloz, facilidade de enxergar padrões onde a maioria só vê ruído e capacidade de aprender assuntos complexos quase sem ajuda. Costuma vir com curiosidade intensa e pensamento não-linear.",
+    careers:
+      "Áreas que combinam: pesquisa científica, física, matemática, engenharia avançada, medicina, direito de ponta, programação, xadrez de alto nível, estratégia e empreendedorismo de base tecnológica.",
+    people:
+      "Você está bem no patamar estimado de Arnold Schwarzenegger (~135) e perto de Emma Watson (~138) — estimativas populares (não oficiais). É também o piso da Mensa, a sociedade que só aceita o topo de 2%.",
+  },
+  138: {
+    title: "Superdotação · altas habilidades",
+    verdict:
+      "Está acima do corte de superdotação (130) e no piso da Mensa — nível que o senso comum chama de gênio, alcançado por menos de 1% das pessoas.",
+    summary:
+      "Com 31 acertos, seu raciocínio está entre os mais fortes. Você resolve problemas totalmente novos sem exemplos, aprende sozinho temas difíceis e faz conexões entre campos distantes. É o perfil típico de quem se destaca em ciência, tecnologia e criação de alto nível.",
+    careers:
+      "Você tende a brilhar em: pesquisa de ponta, física, matemática, engenharia e computação avançadas, medicina, direito de elite, estratégia e empreendedorismo inovador.",
+    people:
+      "Você está praticamente no QI estimado de Emma Watson (~138). Logo acima aparecem Natalie Portman, Shakira e Madonna (~140) — todas estimativas populares e não oficiais.",
+  },
+  142: {
+    title: "Superdotação em grau elevado",
+    verdict:
+      "Bem acima do corte de superdotação (130): é o que o senso comum chama de nível de gênio, mais raro que 1 em cada 250 pessoas.",
+    summary:
+      "Com 32 acertos, você está num patamar raro. Sustenta raciocínios longos e complexos sem se perder, abstrai muito acima do exigido pela maioria das profissões e aprende praticamente qualquer assunto por conta própria. É a faixa de pesquisadores e criadores de destaque.",
+    careers:
+      "Combinam com você: pesquisa científica de fronteira, física, matemática, filosofia, engenharia e computação avançadas, medicina e direito de elite, além de xadrez e estratégia de alto nível.",
+    people:
+      "Você está no mesmo patamar estimado de Natalie Portman, Shakira, Madonna e Hillary Clinton (~140) — estimativas populares (não oficiais). O próximo degrau citado nessas listas é Bill Gates (~150).",
+  },
+  145: {
+    title: "Superdotação em grau muito elevado",
+    verdict:
+      "QI 145 é mais raro que 1 em cada 1.000 pessoas — superdotação em grau elevado, o nível que o senso comum associa a gênios.",
+    summary:
+      "Com 33 acertos (o máximo), você atingiu o topo desta bateria. É um raciocínio abstrato e lógico excepcional, com facilidade de aprender assuntos complexos quase sem instrução e de sustentar raciocínios longos e inéditos. Vale lembrar: motivação e disciplina pesam tanto quanto o número.",
+    careers:
+      "Áreas que combinam: pesquisa de fronteira, matemática, física, filosofia, computação e engenharia avançadas, xadrez de alto nível e campos que exigem abstração pesada e aprendizado autônomo.",
+    people:
+      "Você está acima do QI estimado de quase todas as celebridades das listas populares; o próximo nome citado é Bill Gates (~150). Gênios históricos como Einstein e Stephen Hawking costumam aparecer em ~160, mas sempre como estimativas retroativas — nenhum deles chegou a fazer um teste real.",
+  },
+};
+
 // Ao terminar o teste, guardamos o tempo e mostramos primeiro a tela de prévia
 // ("Seu resultado está pronto!"). O resultado já é montado por baixo (borrado),
 // mas o paywall só aparece quando a pessoa toca em "OBTER RESULTADOS".
@@ -1266,19 +1515,23 @@ function renderResult(iq) {
   document.getElementById("iq-compare").textContent = brazilComparison(iq);
 
   const profile = getProfile(iq);
+  // A partir de 22 acertos (QI ≥ 104) usamos o perfil específico por valor de QI,
+  // com veredito de gênio/superdotação, profissões reais e pessoas reais próximas.
+  const detail = IQ_DETAIL[iq] || null;
   const rarity = rarityLine(iq);
   document.getElementById("result-profile").innerHTML = `
-    <h3 class="profile-title">${profile.title}</h3>
-    <p class="profile-desc">${profile.summary}</p>
+    <h3 class="profile-title">${detail ? detail.title : profile.title}</h3>
+    ${detail ? `<p class="profile-verdict">${detail.verdict}</p>` : ""}
+    <p class="profile-desc">${detail ? detail.summary : profile.summary}</p>
     ${rarity ? `<p class="profile-rarity">${rarity}</p>` : ""}
     <h4 class="profile-h">Habilidades e pontos fortes desse nível</h4>
     <ul class="profile-list">${profile.abilities.map((a) => `<li>${a}</li>`).join("")}</ul>
-    <h4 class="profile-h">Áreas e profissões que costumam combinar</h4>
-    <p class="profile-desc">${profile.careers}</p>
+    <h4 class="profile-h">Profissões reais que combinam com você</h4>
+    <p class="profile-desc">${detail ? detail.careers : profile.careers}</p>
     <h4 class="profile-h">Países com média de QI parecida</h4>
     <p class="profile-desc">${countryComparison(iq)}</p>
-    <h4 class="profile-h">Pessoas e grupos com QI próximo</h4>
-    <p class="profile-desc">${referenceLine(iq)}</p>
+    <h4 class="profile-h">Pessoas com QI próximo do seu</h4>
+    <p class="profile-desc">${detail ? detail.people : referenceLine(iq)}</p>
     <h4 class="profile-h">Curiosidades</h4>
     <ul class="profile-list profile-list-dot">${profile.curiosities.map((c) => `<li>${c}</li>`).join("")}</ul>
     <div class="profile-about">${IQ_ABOUT}</div>
