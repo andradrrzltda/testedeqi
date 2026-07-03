@@ -406,22 +406,22 @@ const QUESTIONS = [
   // 2) Cruzes (+) — o bloco de cruzes regular que continua o padrão
   {
     category: "Raciocínio matricial", type: "image", difficulty: "medio",
-    gridImg: "images/2.png", optionsImg: "images/22.png", correct: 1,
+    gridImg: "images/2.png", optionsImg: "images/22.png", correct: 5,
   },
   // 3) Losangos com X — a unidade igual às demais
   {
     category: "Raciocínio matricial", type: "image", difficulty: "facil",
-    gridImg: "images/3.png", optionsImg: "images/33.png", correct: 0,
+    gridImg: "images/3.png", optionsImg: "images/33.png", correct: 2,
   },
   // 4) Grades — as linhas verticais adensam à direita; a mais densa
   {
     category: "Raciocínio matricial", type: "image", difficulty: "medio",
-    gridImg: "images/4.png", optionsImg: "images/44.png", correct: 3,
+    gridImg: "images/4.png", optionsImg: "images/44.png", correct: 0,
   },
   // 5) Ondas + barco — as ondas que completam o canto
   {
     category: "Raciocínio matricial", type: "image", difficulty: "medio",
-    gridImg: "images/5.png", optionsImg: "images/55.png", correct: 1,
+    gridImg: "images/5.png", optionsImg: "images/55.png", correct: 0,
   },
   // 6) Quadradinhos — o quadrado preto avança de posição
   {
@@ -603,50 +603,67 @@ const QUESTIONS = [
     correct: 2,
   },
 
-  // ===== Compreensão verbal (vocabulário e classificação) =====
+  // ===== Perguntas 28–33: sequências numéricas e raciocínio lógico =====
   {
-    category: "Compreensão verbal",
-    difficulty: "facil",
-    text: "Qual é o antônimo de 'Meticuloso'?",
-    options: ["Descuidado", "Cuidadoso", "Detalhado", "Preciso"],
-    correct: 0,
-  },
-  {
-    category: "Compreensão verbal",
-    difficulty: "facil",
-    text: "Qual palavra não pertence ao grupo?",
-    options: ["Violino", "Flauta", "Piano", "Bateria", "Pincel"],
-    correct: 4,
-  },
-  {
-    category: "Compreensão verbal",
-    difficulty: "dificil",
-    text: "Qual é o antônimo de 'Perspicaz'?",
-    options: ["Obtuso", "Atento", "Sagaz", "Astuto"],
-    correct: 0,
-  },
-
-  // ===== Memória de trabalho =====
-  {
-    category: "Memória de trabalho",
-    difficulty: "facil",
-    text: "Leia a sequência e escolha a ordem invertida correta: 4 - 8 - 2 - 5",
-    options: ["5-2-8-4", "4-8-2-5", "5-8-2-4", "2-4-5-8"],
-    correct: 0,
-  },
-  {
-    category: "Memória de trabalho",
+    category: "Raciocínio numérico",
     difficulty: "medio",
-    text: "Memorize a sequência 6-1-8-4-2. Qual é o terceiro número dela?",
-    options: ["1", "8", "4", "2"],
+    text: "Qual número completa a sequência?\n\n4, 7, 13, 25, 49, ?",
+    options: ["95", "96", "97", "98", "99"],
+    correct: 2,
+  },
+  {
+    category: "Raciocínio numérico",
+    difficulty: "dificil",
+    text: "Qual número completa a sequência?\n\n2, 3, 6, 15, 42, ?",
+    options: ["117", "123", "126", "129", "132"],
     correct: 1,
   },
   {
-    category: "Memória de trabalho",
+    category: "Raciocínio lógico",
     difficulty: "dificil",
-    text: "Reorganize mentalmente: primeiro os números em ordem crescente, depois as letras em ordem alfabética: 7-B-3-D-A. Qual é a sequência correta?",
-    options: ["3-7-A-B-D", "A-B-D-3-7", "7-3-A-B-D", "3-7-D-B-A"],
-    correct: 0,
+    text:
+      "Cinco pessoas (Ana, Bruno, Carlos, Diana e Eduardo) sentam-se em uma fila.\n\n" +
+      "• Ana está à esquerda de Bruno.\n" +
+      "• Carlos está imediatamente à direita de Diana.\n" +
+      "• Eduardo está em uma das extremidades.\n" +
+      "• Bruno não está ao lado de Carlos.\n" +
+      "• Diana não está na primeira posição.\n\n" +
+      "Qual afirmação é necessariamente verdadeira?",
+    options: [
+      "Ana está na primeira posição.",
+      "Eduardo está na quinta posição.",
+      "Diana está à esquerda de Ana.",
+      "Carlos não está na quinta posição.",
+      "Bruno está na quarta posição.",
+    ],
+    correct: 3,
+  },
+  {
+    category: "Raciocínio lógico",
+    difficulty: "medio",
+    text:
+      "Você está participando de uma corrida. Em determinado momento, ultrapassa o competidor que estava em 2º lugar.\n\nEm que posição você fica?",
+    options: ["1º", "2º", "3º", "Depende da velocidade.", "Não é possível saber."],
+    correct: 1,
+  },
+  {
+    category: "Raciocínio lógico",
+    difficulty: "facil",
+    text: "Um fazendeiro tem 15 ovelhas. Todas morrem, menos 8. Quantas sobram?",
+    options: ["7", "8", "15", "0", "3"],
+    correct: 1,
+  },
+  {
+    category: "Raciocínio lógico",
+    difficulty: "dificil",
+    text:
+      "Em um torneio com seis jogadores, cada um enfrentou todos os outros exatamente uma vez.\n\n" +
+      "• Apenas um jogador venceu todas as partidas.\n" +
+      "• Apenas um jogador perdeu todas as partidas.\n" +
+      "• Nenhum empate ocorreu.\n\n" +
+      "Qual é o número mínimo de jogadores que terminaram com exatamente duas vitórias?",
+    options: ["0", "1", "2", "3", "4"],
+    correct: 1,
   },
 ];
 
