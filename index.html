@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>testedeqi — Descubra seu QI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- App do teste (tela única) -->
+  <main class="app-section">
+    <div class="card" id="app-card">
+
+      <!-- Tela inicial -->
+      <section id="screen-start" class="screen active">
+        <h1 class="brand-title">🧠 TESTEDEQI</h1>
+        <p class="subtitle">
+          Teste baseado nos formatos usados em avaliações psicométricas reais —
+          raciocínio matricial, espacial, verbal, numérico e memória de trabalho.
+          33 questões, organizadas por nível de dificuldade, sem cadastro.
+        </p>
+        <button class="btn primary" id="btn-start">Iniciar teste</button>
+      </section>
+
+      <!-- Tela do quiz -->
+      <section id="screen-quiz" class="screen screen-quiz-panel">
+        <div class="quiz-topbar">
+          <span class="quiz-logo">🧠 testedeqi</span>
+          <span class="quiz-timer" id="timer">00:00</span>
+        </div>
+        <div class="quiz-progress-track">
+          <div class="quiz-progress-fill" id="progress-bar"></div>
+        </div>
+
+        <div class="quiz-body">
+          <div class="quiz-visual">
+            <h2 id="question-text">Pergunta</h2>
+            <div class="matrix-grid" id="matrix-grid" hidden></div>
+            <div class="spatial-reference" id="spatial-reference" hidden>
+              <span class="spatial-label">Referência</span>
+              <div id="spatial-reference-shape"></div>
+            </div>
+          </div>
+          <div class="quiz-answer">
+            <span class="answer-label">Escolha sua resposta:</span>
+            <div class="options" id="options"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tela de resultado (com o paywall sobreposto por cima) -->
+      <section id="screen-result" class="screen">
+        <div class="result-content" id="result-content">
+          <h1>Resultado</h1>
+          <div class="score-circle">
+            <span id="iq-score">100</span>
+            <small>QI estimado</small>
+          </div>
+          <p id="iq-class" class="iq-class"></p>
+          <p id="iq-compare" class="iq-percentile"></p>
+          <p id="result-detail" class="subtitle"></p>
+          <p id="result-time" class="subtitle"></p>
+          <div class="result-profile" id="result-profile"></div>
+          <div class="category-breakdown" id="category-breakdown"></div>
+          <button class="btn primary" id="btn-restart">Refazer teste</button>
+        </div>
+
+        <!-- Camada de cobrança sobreposta ao resultado borrado -->
+        <div class="paywall-overlay" id="paywall-overlay" hidden>
+          <div class="paywall-card">
+            <h2 class="paywall-title">Seu resultado está pronto! 🎉</h2>
+            <div class="teaser" id="teaser"></div>
+            <button class="btn primary" id="btn-pay">Ver resultado completo — R$ 5 (Pix)</button>
+
+            <div id="pix-box" class="pix-box" hidden>
+              <p class="pix-instructions">Escaneie o QR Code no app do seu banco ou use o Pix copia e cola:</p>
+              <img id="pix-qr" class="pix-qr" alt="QR Code Pix" />
+              <div class="pix-copy-row">
+                <input id="pix-code" class="pix-code" readonly />
+                <button class="btn ghost" id="btn-copy-pix">Copiar</button>
+              </div>
+              <p id="pix-status" class="pix-status">Aguardando pagamento…</p>
+            </div>
+
+            <p class="paywall-foot">Pagamento único. Resultado recreativo, sem validade clínica.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <p class="footnote">© 2026 testedeqi — estimativa recreativa, sem validade clínica.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
