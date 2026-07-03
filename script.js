@@ -507,55 +507,32 @@ const QUESTIONS = [
     correct: 2,
   },
 
-  // ===== Raciocínio verbal (analogias) =====
+  // ===== Perguntas 15–20: padrões de imagem (mesmo formato das 1–10) =====
+  // Cada uma usa o quadro da matriz (imgNN.png) e o painel de 6 opções
+  // (imgNN-op.png). Opções numeradas linha a linha (0..5).
   {
-    category: "Raciocínio verbal",
-    difficulty: "facil",
-    text: "Professor está para Escola assim como Médico está para:",
-    options: ["Hospital", "Paciente", "Remédio", "Enfermeira"],
-    correct: 0,
+    category: "Raciocínio matricial", type: "image", difficulty: "facil",
+    gridImg: "images/img15.png", optionsImg: "images/img15-op.png", correct: 0,
   },
   {
-    category: "Raciocínio verbal",
-    difficulty: "medio",
-    text: "Chave está para Fechadura assim como Senha está para:",
-    options: ["Login", "Computador", "Teclado", "Internet"],
-    correct: 0,
+    category: "Raciocínio matricial", type: "image", difficulty: "medio",
+    gridImg: "images/img16.png", optionsImg: "images/img16-op.png", correct: 1,
   },
   {
-    category: "Raciocínio verbal",
-    difficulty: "dificil",
-    text: "Semente está para Árvore assim como Ovo está para:",
-    options: ["Ave", "Ninho", "Pena", "Bico"],
-    correct: 0,
-  },
-
-  // ===== Similaridades (raciocínio abstrato verbal, estilo WAIS) =====
-  {
-    category: "Similaridades",
-    difficulty: "facil",
-    text: "Em que sentido Maçã e Banana são parecidas?",
-    options: ["Ambas são frutas", "Ambas são vermelhas", "Ambas crescem em cactos", "Ambas têm caroço"],
-    correct: 0,
+    category: "Raciocínio matricial", type: "image", difficulty: "medio",
+    gridImg: "images/img17.png", optionsImg: "images/img17-op.png", correct: 4,
   },
   {
-    category: "Similaridades",
-    difficulty: "medio",
-    text: "Em que sentido um Relógio e uma Régua são parecidos?",
-    options: ["Ambos são instrumentos de medição", "Ambos têm ponteiros", "Ambos são redondos", "Ambos indicam a hora"],
-    correct: 0,
+    category: "Raciocínio matricial", type: "image", difficulty: "dificil",
+    gridImg: "images/img18.png", optionsImg: "images/img18-op.png", correct: 5,
   },
   {
-    category: "Similaridades",
-    difficulty: "dificil",
-    text: "Em que sentido Esperança e Medo são parecidos?",
-    options: [
-      "Ambos são emoções relacionadas a algo que ainda não aconteceu",
-      "Ambos são sentimentos negativos",
-      "Ambos causam tristeza",
-      "Ambos são incontroláveis",
-    ],
-    correct: 0,
+    category: "Raciocínio matricial", type: "image", difficulty: "medio",
+    gridImg: "images/img19.png", optionsImg: "images/img19-op.png", correct: 2,
+  },
+  {
+    category: "Raciocínio matricial", type: "image", difficulty: "dificil",
+    gridImg: "images/img20.png", optionsImg: "images/img20-op.png", correct: 4,
   },
 
   // ===== Raciocínio numérico (sequências e problemas aplicados) =====
@@ -787,10 +764,10 @@ function renderQuestion() {
   const q = QUESTIONS[currentIndex];
   selectedOption = null;
 
-  // Transição a cada nova pergunta. Nas 10 primeiras (matrizes em imagem) usamos
-  // uma animação mais longa e elaborada; nas demais, o fade curto.
+  // Transição a cada nova pergunta. Nas de imagem (matrizes) usamos um fade um
+  // pouco mais longo; nas de texto, o fade curto.
   if (quizBody) {
-    const longAnim = currentIndex < 10;
+    const longAnim = q.type === "image";
     quizBody.classList.remove("q-enter", "q-enter-long");
     void quizBody.offsetWidth;
     quizBody.classList.add(longAnim ? "q-enter-long" : "q-enter");
