@@ -16,12 +16,16 @@
   --text: #201d17;
   --muted: #7a7368;
   --border: #ece5d2;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Sora", "Inter", system-ui, sans-serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
   background: var(--bg);
   color: var(--text);
 }
@@ -76,19 +80,29 @@ a {
   display: flex;
 }
 
+h1,
+h2,
+.loader-title,
+.paywall-title,
+.profile-title,
+.reveal-title {
+  font-family: var(--font-display);
+}
+
 h1 {
   margin: 0;
   font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .brand-title {
-  font-family: "Archivo Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-display);
+  font-weight: 800;
   font-size: 3rem;
   line-height: 1.05;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   -webkit-background-clip: text;
   background-clip: text;
@@ -134,6 +148,251 @@ h1 {
   border: 1px solid var(--border);
   color: var(--text);
   padding: 12px 18px;
+}
+
+/* ---- Tela de carregamento (IA calculando) ---- */
+
+.screen-loading {
+  gap: 20px;
+  padding: 20px 8px 12px;
+}
+
+.loader-orb {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+
+.loader-orb-inner {
+  position: absolute;
+  inset: 11px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: inset 0 2px 8px rgba(32, 29, 23, 0.06);
+}
+
+/* "Líquido" dourado que sobe de baixo para cima conforme a porcentagem. */
+.loader-orb-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+  will-change: height;
+}
+
+.loader-orb-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.loader-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 6;
+}
+
+.loader-progress {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 339; /* 2π·54 */
+  stroke-dashoffset: 339;
+  filter: drop-shadow(0 3px 8px rgba(184, 145, 47, 0.35));
+  will-change: stroke-dashoffset;
+}
+
+.loader-percent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  mix-blend-mode: normal;
+}
+
+.loader-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.loader-status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  transition: opacity 0.2s ease;
+}
+
+/* status das mensagens com leve fade */
+.loader-status {
+  animation: loaderStatusFade 0.4s ease;
+}
+
+@keyframes loaderStatusFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loader-foot {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 360px;
+}
+
+/* ---- Tela de prévia (antes do resultado + paywall) ---- */
+
+.screen-reveal {
+  gap: 28px;
+  padding: 8px 4px;
+}
+
+.reveal-title {
+  font-size: 1.75rem;
+  line-height: 1.12;
+}
+
+@media (min-width: 560px) {
+  .reveal-title {
+    font-size: 2.1rem;
+  }
+}
+
+.reveal-cards {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.reveal-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 0;
+  max-width: 170px;
+}
+
+.reveal-avatar {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.reveal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reveal-card-you {
+  margin-bottom: 16px;
+}
+
+.reveal-card-you .reveal-avatar {
+  background: #fffdf6;
+  border-color: var(--gold-light);
+  box-shadow: 0 18px 40px rgba(184, 145, 47, 0.28);
+}
+
+.reveal-card-side .reveal-avatar {
+  opacity: 0.85;
+}
+
+.reveal-label {
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.reveal-label strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.reveal-card-you .reveal-label {
+  color: var(--text);
+}
+
+.reveal-card-you .reveal-label strong {
+  font-size: 1.3rem;
+  color: var(--gold-dark);
+}
+
+.reveal-btn {
+  width: 100%;
+  max-width: 420px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Entrada em cascata ao chegar do carregamento para a tela do Einstein. */
+@keyframes revealPop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.screen-reveal.active .reveal-title {
+  animation: revealPop 0.5s 0.04s both cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.screen-reveal.active .reveal-card:nth-child(1) {
+  animation: revealPop 0.55s 0.12s both cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.screen-reveal.active .reveal-card:nth-child(2) {
+  animation: revealPop 0.55s 0.2s both cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.screen-reveal.active .reveal-card:nth-child(3) {
+  animation: revealPop 0.55s 0.28s both cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.screen-reveal.active .reveal-btn {
+  animation: revealPop 0.5s 0.4s both cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (max-width: 640px) {
+  .reveal-title {
+    font-size: 1.5rem;
+  }
+  .reveal-cards {
+    gap: 8px;
+  }
+  .reveal-avatar {
+    border-radius: 14px;
+    padding: 10px 10px 0;
+  }
 }
 
 /* ---- Tela de pagamento (paywall) ---- */
@@ -590,6 +849,45 @@ h1 {
   gap: 40px;
   padding: 36px 32px 44px;
   flex-wrap: wrap;
+}
+
+.quiz-body.q-enter {
+  animation: questionEnter 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes questionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Perguntas 1–10 (matrizes em imagem): fade um pouco mais longo. */
+.quiz-body.q-enter-long {
+  animation: simpleFade 0.7s ease both;
+}
+
+/* Modo "reduzir movimento": trocamos os deslizes/blur por um fade simples
+   (sem deslocamento grande), em vez de remover a animação por completo. */
+@keyframes simpleFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-status {
+    animation: none;
+  }
+  .quiz-body.q-enter,
+  .screen-reveal.active .reveal-title,
+  .screen-reveal.active .reveal-card,
+  .screen-reveal.active .reveal-btn {
+    animation: simpleFade 0.45s ease both;
+  }
 }
 
 .quiz-visual {

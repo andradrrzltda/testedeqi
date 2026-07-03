@@ -6,7 +6,7 @@
 <title>testedeqi — Descubra seu QI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -50,6 +50,53 @@
             <div class="options" id="options"></div>
           </div>
         </div>
+      </section>
+
+      <!-- Tela de carregamento (IA "calculando") antes da prévia -->
+      <section id="screen-loading" class="screen screen-loading">
+        <div class="loader-orb">
+          <div class="loader-orb-inner">
+            <span class="loader-orb-fill" id="loader-fill"></span>
+            <span class="loader-percent" id="loader-percent">0%</span>
+          </div>
+          <svg class="loader-orb-ring" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="loader-track" cx="60" cy="60" r="54" />
+            <circle class="loader-progress" id="loader-ring" cx="60" cy="60" r="54" />
+          </svg>
+        </div>
+        <h2 class="loader-title">Calculando seu resultado com IA</h2>
+        <p class="loader-status" id="loader-status">Analisando suas respostas…</p>
+        <p class="loader-foot">Avaliando cada resposta para estimar seu QI e traços de personalidade.</p>
+      </section>
+
+      <!-- Tela de "prévia" antes de mostrar o resultado e o paywall -->
+      <section id="screen-reveal" class="screen screen-reveal">
+        <h1 class="reveal-title brand-title">Seu resultado está pronto!<br />Descubra agora!</h1>
+
+        <div class="reveal-cards">
+          <figure class="reveal-card reveal-card-side">
+            <div class="reveal-avatar">
+              <img src="images/pessoa-media.png" alt="Pessoa média" />
+            </div>
+            <figcaption class="reveal-label">Pessoa média<br /><strong>QI 100</strong></figcaption>
+          </figure>
+
+          <figure class="reveal-card reveal-card-you">
+            <div class="reveal-avatar">
+              <img src="images/seu-qi.png" alt="Seu QI" />
+            </div>
+            <figcaption class="reveal-label">Seu QI<br /><strong>?</strong></figcaption>
+          </figure>
+
+          <figure class="reveal-card reveal-card-side">
+            <div class="reveal-avatar">
+              <img src="images/einstein.png" alt="Albert Einstein" />
+            </div>
+            <figcaption class="reveal-label">Albert Einstein<br /><strong>QI 160</strong></figcaption>
+          </figure>
+        </div>
+
+        <button class="btn primary reveal-btn" id="btn-reveal">OBTER RESULTADOS</button>
       </section>
 
       <!-- Tela de resultado (com o paywall sobreposto por cima) -->

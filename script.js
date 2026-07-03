@@ -683,6 +683,8 @@ let answersLog = [];
 const screens = {
   start: document.getElementById("screen-start"),
   quiz: document.getElementById("screen-quiz"),
+  loading: document.getElementById("screen-loading"),
+  reveal: document.getElementById("screen-reveal"),
   result: document.getElementById("screen-result"),
 };
 
@@ -784,6 +786,15 @@ function renderImageOptions(optionsImg) {
 function renderQuestion() {
   const q = QUESTIONS[currentIndex];
   selectedOption = null;
+
+  // Transição a cada nova pergunta. Nas 10 primeiras (matrizes em imagem) usamos
+  // uma animação mais longa e elaborada; nas demais, o fade curto.
+  if (quizBody) {
+    const longAnim = currentIndex < 10;
+    quizBody.classList.remove("q-enter", "q-enter-long");
+    void quizBody.offsetWidth;
+    quizBody.classList.add(longAnim ? "q-enter-long" : "q-enter");
+  }
 
   progressBar.style.width = `${(currentIndex / QUESTIONS.length) * 100}%`;
 
@@ -1154,8 +1165,9 @@ function getProfile(iq) {
   return IQ_PROFILES.find((p) => iq >= p.min) || IQ_PROFILES[IQ_PROFILES.length - 1];
 }
 
-// Ao terminar o teste, guardamos o tempo e mostramos o paywall (o resultado só
-// é calculado e renderizado depois do pagamento confirmado, em renderResult()).
+// Ao terminar o teste, guardamos o tempo e mostramos primeiro a tela de prévia
+// ("Seu resultado está pronto!"). O resultado já é montado por baixo (borrado),
+// mas o paywall só aparece quando a pessoa toca em "OBTER RESULTADOS".
 let finalSeconds = 0;
 function finishQuiz() {
   clearInterval(timerInterval);
@@ -1164,6 +1176,68 @@ function finishQuiz() {
   const iq = IQ_BY_CORRECT[idx];
   renderResult(iq); // resultado fica renderizado por baixo (borrado)
   buildTeaser(iq); // gancho: parte nítida + parte desfocada
+  runLoading(() => showScreen("reveal")); // "IA calculando" (7s) e depois a prévia
+}
+
+// Tela de carregamento simulando a IA calculando o resultado (7 segundos).
+// Anima o anel circular, a porcentagem e a barra, trocando as mensagens.
+const LOADING_MS = 7000;
+const LOADING_MESSAGES = [
+  "Analisando suas respostas…",
+  "Avaliando cada questão respondida…",
+  "Calculando seu QI estimado…",
+  "Mapeando seus traços de personalidade…",
+  "Comparando com a população…",
+  "Gerando seu resultado final…",
+];
+const RING_CIRCUMFERENCE = 339; // 2π·54
+
+function runLoading(onDone) {
+  const percentEl = document.getElementById("loader-percent");
+  const statusEl = document.getElementById("loader-status");
+  const fillEl = document.getElementById("loader-fill");
+  const ringEl = document.getElementById("loader-ring");
+
+  showScreen("loading");
+
+  const start = performance.now();
+  let lastMsg = -1;
+
+  function setMessage(idx) {
+    if (idx === lastMsg) return;
+    lastMsg = idx;
+    statusEl.textContent = LOADING_MESSAGES[idx];
+    statusEl.style.animation = "none";
+    void statusEl.offsetWidth;
+    statusEl.style.animation = "";
+  }
+  setMessage(0);
+
+  function frame(now) {
+    const p = Math.min(1, (now - start) / LOADING_MS);
+
+    // Número, bola (líquido subindo) e anel — tudo no mesmo quadro, sincronizado.
+    percentEl.textContent = `${Math.round(p * 100)}%`;
+    fillEl.style.height = `${p * 100}%`;
+    ringEl.style.strokeDashoffset = String(RING_CIRCUMFERENCE * (1 - p));
+
+    const msgIdx = Math.min(
+      LOADING_MESSAGES.length - 1,
+      Math.floor(p * LOADING_MESSAGES.length)
+    );
+    setMessage(msgIdx);
+
+    if (p < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      setTimeout(onDone, 260);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// "OBTER RESULTADOS": sai da prévia, sobrepõe a cobrança e mostra o resultado.
+function revealResult() {
   lockResult(); // sobrepõe a cobrança e borra o resultado
   showScreen("result");
 }
@@ -1380,5 +1454,22 @@ btnCopyPix.addEventListener("click", () => {
   setTimeout(() => (btnCopyPix.textContent = "Copiar"), 1500);
 });
 
+// Pré-carrega as imagens das perguntas (matriz + opções) já no carregamento da
+// página, para não aparecer só o texto por um instante enquanto a imagem baixa.
+function preloadQuizImages() {
+  QUESTIONS.forEach((q) => {
+    if (q.type === "image") {
+      [q.gridImg, q.optionsImg].forEach((src) => {
+        if (src) {
+          const im = new Image();
+          im.src = src;
+        }
+      });
+    }
+  });
+}
+preloadQuizImages();
+
+document.getElementById("btn-reveal").addEventListener("click", revealResult);
 btnStart.addEventListener("click", startQuiz);
 btnRestart.addEventListener("click", startQuiz);
