@@ -709,6 +709,7 @@ function startQuiz() {
   score = 0;
   answersLog = [];
   startTime = Date.now();
+  if (window.trackEvent) window.trackEvent("begin_quiz");
   showScreen("quiz");
   renderQuestion();
   timerInterval = setInterval(updateTimer, 1000);
@@ -1579,6 +1580,7 @@ function buildTeaser(iq) {
 function lockResult() {
   document.getElementById("result-content").classList.add("locked");
   document.getElementById("paywall-overlay").hidden = false;
+  if (window.trackEvent) window.trackEvent("reach_paywall");
   resetPix();
 }
 
@@ -1662,6 +1664,8 @@ function pixPaid() {
     clearInterval(pixPollTimer);
     pixPollTimer = null;
   }
+  // Conversão! Avisa as ferramentas de campanha (Meta/GA4) que houve compra.
+  if (window.trackEvent) window.trackEvent("purchase", { value: 5, currency: "BRL" });
   pixStatus.classList.add("paid");
   pixStatus.textContent = "Pagamento confirmado! Liberando seu resultado…";
   setTimeout(unlockResult, 800);

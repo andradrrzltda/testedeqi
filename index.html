@@ -4,6 +4,69 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>testedeqi — Descubra seu QI</title>
+<meta name="description" content="Teste de QI online baseado em avaliações psicométricas reais: raciocínio matricial, espacial, numérico e lógico. Descubra seu QI em minutos." />
+<link rel="canonical" href="https://testedeqi.onrender.com/" />
+
+<!-- Tags de compartilhamento (Open Graph / Twitter) -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:site_name" content="testedeqi" />
+<meta property="og:url" content="https://testedeqi.onrender.com/" />
+<meta property="og:title" content="Teste de QI — Descubra seu QI em minutos" />
+<meta property="og:description" content="33 questões baseadas em avaliações reais: raciocínio matricial, espacial, numérico e lógico. Faça o teste e veja seu QI na hora." />
+<meta property="og:image" content="https://testedeqi.onrender.com/images/og-cover.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Teste de QI — Descubra seu QI em minutos" />
+<meta name="twitter:description" content="33 questões baseadas em avaliações reais. Faça o teste e veja seu QI na hora." />
+<meta name="twitter:image" content="https://testedeqi.onrender.com/images/og-cover.png" />
+
+<!-- ================= Rastreamento de campanha (Meta Pixel + GA4) =================
+     Cole os IDs abaixo quando criar as contas. Enquanto estiverem vazios,
+     NADA é carregado (nenhuma requisição, nenhum erro). O evento de "compra"
+     é disparado automaticamente quando o Pix é confirmado (window.trackEvent). -->
+<script>
+  window.ANALYTICS = {
+    ga4: "",                      // ex.: "G-XXXXXXXXXX"  (Google Analytics 4)
+    metaPixel: "2050995762462230", // ID do Pixel do Meta (testedeqi)
+  };
+  (function () {
+    var a = window.ANALYTICS;
+    if (a.ga4) {
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + a.ga4;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { dataLayer.push(arguments); };
+      gtag("js", new Date());
+      gtag("config", a.ga4);
+    }
+    if (a.metaPixel) {
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = "2.0"; n.queue = [];
+        t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init", a.metaPixel);
+      fbq("track", "PageView");
+    }
+  })();
+  // Dispara um evento em todas as ferramentas ativas (GA4 + Meta).
+  window.trackEvent = function (name, params) {
+    params = params || {};
+    try { if (window.gtag && window.ANALYTICS.ga4) gtag("event", name, params); } catch (e) {}
+    try {
+      if (window.fbq && window.ANALYTICS.metaPixel) {
+        var map = { purchase: "Purchase", begin_quiz: "InitiateCheckout", reach_paywall: "AddToCart" };
+        fbq("track", map[name] || name, params);
+      }
+    } catch (e) {}
+  };
+</script>
+<!-- ============================================================================= -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
